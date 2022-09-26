@@ -157,9 +157,11 @@ Cluster Tools - NeuVector - next
 
 Container Runtime: Docker runtime
 
-Chech "PVC status"
-
-PVC Configuration: longhorn
+PVC Configuration: 
+   
+   Chech: "PVC status"
+   
+   Storage Class name: longhorn 
 
 Service Configuration: 
 
