@@ -1,4 +1,4 @@
-# Rancher_NeuVector
+# Rancher+NeuVector
 ### Project Goal: Achieve Rapid Deployment of Secure K8S Clusters and their subsequent fine-tuning with NeuVector
 
 While working on this project, i used information from this document [Rancher's hardening guide](https://docs.ranchermanager.rancher.io/pages-for-subheaders/rancher-v2.6-hardening-guides).
@@ -138,45 +138,26 @@ done
 chmod +x apply_networkPolicy_to_all_ns.sh
 ```
 
-## 5. Deploy cluster using RKE template and nodes template
+## 5. Deploy two or more cluster's using RKE template and nodes template
 
 Cluster Management - Cluster - Create - VMware vSphere 
 
 - Use Secured RKE template
-- Use Secured NODE template 
-- 
+- Use Secured NODE template
 
 ## 6. Install NeuVector in new secured cluster's
 
-### - Установите все кластера longhorn (без него настройки NeuVector не сохранются) 
+### - Install all longhorn on all clusters (without it, NeuVector settings are not guarded) 
 
 Cluster Tools - Longhorn - next - Install 
-
-### - Установите NeuVector на k3s:
-
-Cluster Tools - NeuVector - next
-
-Container Runtime: k3s containerd runtime
-
-PVC Configuration: longhorn
-
-Service Configuration: 
-
-   Manager Service Type: NodePort
     
-   Fed Master Service Type: NodePort
-    
-   Fed Managed Service Type: NodePort
-    
-   Controller Rest API Service Type: NodePort
-    
-  Install
-    
-### - Установите NeuVector на rke:
+### - Install NeuVector на rke:
 
 Cluster Tools - NeuVector - next 
 
 Container Runtime: Docker runtime
+
+Chech "PVC status"
 
 PVC Configuration: longhorn
 
