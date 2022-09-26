@@ -140,8 +140,13 @@ chmod +x apply_networkPolicy_to_all_ns.sh
 
 ## 5. Deploy cluster using RKE template and nodes template
 
-Cluster Management - Cluster - Create - VMware vSphere - Node Templates-Add Template
+Cluster Management - Cluster - Create - VMware vSphere 
 
+- Use Secured RKE template
+- Use Secured NODE template 
+- 
+
+## 6. Install NeuVector in new secured cluster's
 
 ### - Установите все кластера longhorn (без него настройки NeuVector не сохранются) 
 
