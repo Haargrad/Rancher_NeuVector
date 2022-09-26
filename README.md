@@ -147,7 +147,7 @@ Cluster Management - Cluster - Create - VMware vSphere
 
 ## 6. Install NeuVector in new secured cluster's
 
-### - Install all longhorn on all clusters (without it, NeuVector settings are not guarded) 
+### - Install all longhorn on all clusters (without it, NeuVector settings will not be saved) 
 
 Cluster Tools - Longhorn - next - Install 
     
@@ -175,19 +175,15 @@ Service Configuration:
  
   Install
     
-## 6. Настройка NeuVector на ns-k3s-fed, ns-k3s-slave и ns-rke-unsecured
+### Before setting up any cluster, enable the autoscan system, when this setting is enabled, access to the cluster may be lost for a couple of minutes
 
-### Перед настройкой любого кластера включите система автосканирование, при этом может пропасть доступ к кластеру на пару минут
+## 7. Config NeuVector on Primary cluster 
 
-### - Настройка ns-k3s-fed
+Go to the web interface NeuVector, Settings - Configuration - Cluster - Cluster Name (Rename cluster)
 
-Проходим в вэб интерфейс NeuVector, Settings - Configuration - Cluster - Cluster Name (Переименовываем кластер)
+Promoting a Cluster to a Primary Cluster, Administrator Avatar - Multiple Clusters - Promote - Primary Cluster Server - Primary Cluster Port
 
-Повышаем кластер до федеративного лидера, Аватарка администратора - Multiple Clusters - Promote - Primary Cluster Server - Primary Cluster Port
-
-![545432543](https://user-images.githubusercontent.com/61315483/190148925-16c2b866-7a26-4d77-8c06-2fd888ae062b.png)
-
-Данные для заполнения можно получить из Rancher, в Primary Cluster Server можно использовать ip адрес любой ноды кластера. Primary Cluster Port можно получить из Rancher GUI - ns-k3s-fed - Service Discovery - Services - neuvector-svc-controller-fed-master 
+The data for filling can be obtained from Rancher, in the Primary Cluster Server, you can use the ip address of any cluster node. Primary Cluster Port can be obtained from Rancher GUI - ns-k3s-fed - Service Discovery - Services - neuvector-svc-controller-fed-master 
 
 ### - Настройка ns-k3s-slave
 
@@ -224,8 +220,6 @@ Criterion: CVE names
 Operator: contains ALL of
 
 Value: CVE-2021-3712,CVE-2021-42386,CVE-2021-36159,CVE-2022-1473,CVE-2021-42378,CVE-2022-0778,CVE-2021-42385,CVE-2022-28391,CVE-2021-4044,CVE-2021-42380,CVE-2021-42382,CVE-2021-3711,CVE-2021-42381,CVE-2021-42383,CVE-2018-25032,CVE-2021-42379,CVE-2022-37434,CVE-2021-42384
-
-
 
 Rule 1001:
 
