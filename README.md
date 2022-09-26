@@ -213,7 +213,7 @@ apply policy
 ./account_update.sh
 ```
 ```bash
-apply_networkPolicy_to_all_ns.sh
+./apply_networkPolicy_to_all_ns.sh
 ```
 ## 10 Install CIS Benchmark and run scan
 
