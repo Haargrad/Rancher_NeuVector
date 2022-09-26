@@ -170,6 +170,10 @@ Service Configuration:
    Fed Managed Service Type: NodePort
     
    Controller Rest API Service Type: NodePort  
+
+Other Configuration:
+  
+  Check: Pod Security Policy
  
   Install
     
