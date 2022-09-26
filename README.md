@@ -29,21 +29,12 @@ I used [this document](https://github.com/dff1980/SAPDI-2022#download-images) to
 
 - Намите на аватурку учетной записи Rancher - Account & API Keys - Create API Key - Create - Bearer Token 
 
-![21432143](https://user-images.githubusercontent.com/61315483/189633582-bad5fe3a-15d3-4773-b8aa-5a6b48f3d9fe.png)
-
-![154321](https://user-images.githubusercontent.com/61315483/189633687-807f80ef-d55e-464b-b461-7c51425e28f6.PNG)
-
-
 Скопируйте Bearer Token, он будет нужен для получения доступа к кластерам k8s через rancher cli. 
 
 ## 2. Подготовка шаблона RKE для "безопасного" кластера
 
 - Переходим в документацию к Rancher, нам необходим готовый [шаблон RKE](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#reference-hardened-rke-template-configuration) копируем его.
 - В Rancher GUI создаем шаблон RKE (Cluster Management-RKE1 Configuration-RKE Templates-Add Template-Edit as YAML), вставляем скопированный на предыдушем шаге шаблон.
-
-![543254](https://user-images.githubusercontent.com/61315483/189634137-49de0155-c9aa-4b9a-97c4-9681b861f8ff.png)
-
-![54254235432](https://user-images.githubusercontent.com/61315483/189634651-a007e4e3-39a9-4e29-b901-688dff76e618.png)
 
 ## 3. Подготовка шаблона ноды для "безопасного" кластера
 
