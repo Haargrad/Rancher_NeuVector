@@ -187,46 +187,36 @@ The data for filling can be obtained from Rancher, in the Primary Cluster Server
 
 ## 8. Config NeuVector on Minion cluster
 
-#### a. Connect to a Primary Cluster
-
 Go to the web interface NeuVector, Settings - Configuration - Cluster - Cluster Name (Rename cluster)
 
-Подключаем кластер до федеративному лидеру, Аватарка администратора - Multiple Clusters - Join - Controller Server - Cluster Port
+Connect the minion cluster to the Primary Cluster, Avatar of the administrator - Multiple Clusters - Join - Controller Server - Cluster Port
 
-Данные для заполнения можно получить из Rancher, в Cluster Server можно использовать ip адрес любой ноды кластера. Cluster Port можно получить из Rancher GUI - ns-k3s-slave - Service Discovery - Services - neuvector-svc-controller-api
+The data for filling can be obtained from Rancher, in Cluster Server you can use the ip address of any cluster node. Cluster Port can be obtained from Rancher GUI - MINION_CLUSTER_NAME - Service Discovery - Services - neuvector-svc-controller-api
 
-Token можно получить из интерфейса федеративного лидера. Аватарка администратора - Multiple Clusters - Generate Token - Copy
+The TOKEN can be obtained from the interface of the federated leader. Administrator avatar - Multiple Clusters - Generate Token - Copy
 
-После того как токен будет внесен в поле TOKEN, поля Primary Cluster Server и Primary Cluster Port будут автоматически заполнены.
+After the token is entered in the TOKEN field, the Primary Cluster Server and Primary Cluster Port fields will be automatically filled.
 
-#### b. Подключаем репозитории
+## 9 Apply network and pod police
 
-Локальный репозиторий был сделан на основе [данного документа](https://github.com/dff1980/SAPDI-2022#download-images), это важно, так как NeuVector будет понимать какие уязвимости в Rancher, так же это поможет показать как NeuVector работает с локальный репозиторием. 
+On a machine that has access to the rancher server and carries rancher cli type in:
 
-Подключаем второй репозиторий из DockerHub, данный репозиторий будет проверен на наличие уязвимостей, благодарю этому NeuVector будет понимать как работать с приложени е Hello-Rancher во время демонстрации. 
+rancher login https://%rancherurl% --token BearerToken  --skip-verify
 
-#### c. Настойка Admission Control
+select target cluster and press enter
 
-Перед начало настройки правил переведите STATUS в состояние Enable, и выберите режим работы Monitor или Protect
+apply policy
 
-Нажмите кнопку Add и создайте следущие правила (при создании правил не забывайте нажать зеленый плюс): 
+```bash
+./account_update.sh
+```
+```bash
+apply_networkPolicy_to_all_ns.sh
+```
+## 10 Install CIS Benchmark and run scan
 
-Rule 1000: 
+Cluster Tools - CIS Benchmark - next - Install
 
-comment: Deny install Vulnerable apps
+After install you can run all Hardened profiles scans
 
-Criterion: CVE names
-
-Operator: contains ALL of
-
-Value: CVE-2021-3712,CVE-2021-42386,CVE-2021-36159,CVE-2022-1473,CVE-2021-42378,CVE-2022-0778,CVE-2021-42385,CVE-2022-28391,CVE-2021-4044,CVE-2021-42380,CVE-2021-42382,CVE-2021-3711,CVE-2021-42381,CVE-2021-42383,CVE-2018-25032,CVE-2021-42379,CVE-2022-37434,CVE-2021-42384
-
-Rule 1001:
-
-comment: install only form local registry
-
-Criterion: Image registry
-
-Operator: is one of 
-
-Value: https://index.docker.io/, https://registry.hub.docker.com/, https://registry-1.docker.io/
+## We have a couple of working clusters with NeuVector installed
