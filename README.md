@@ -183,13 +183,13 @@ Go to the web interface NeuVector, Settings - Configuration - Cluster - Cluster 
 
 Promoting a Cluster to a Primary Cluster, Administrator Avatar - Multiple Clusters - Promote - Primary Cluster Server - Primary Cluster Port
 
-The data for filling can be obtained from Rancher, in the Primary Cluster Server, you can use the ip address of any cluster node. Primary Cluster Port can be obtained from Rancher GUI - ns-k3s-fed - Service Discovery - Services - neuvector-svc-controller-fed-master 
+The data for filling can be obtained from Rancher, in the Primary Cluster Server, you can use the ip address of any cluster node. Primary Cluster Port can be obtained from Rancher GUI - PRIMARY_CLUSTER_NAME - Service Discovery - Services - neuvector-svc-controller-fed-master 
 
-### - Настройка ns-k3s-slave
+## 8. Config NeuVector on Minion cluster
 
-#### a. Подключаем к федеративному лидеру
+#### a. Connect to a Primary Cluster
 
-Проходим в вэб интерфейс NeuVector, Settings - Configuration - Cluster - Cluster Name (Переименовываем кластер)
+Go to the web interface NeuVector, Settings - Configuration - Cluster - Cluster Name (Rename cluster)
 
 Подключаем кластер до федеративному лидеру, Аватарка администратора - Multiple Clusters - Join - Controller Server - Cluster Port
 
