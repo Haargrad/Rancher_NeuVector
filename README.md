@@ -14,8 +14,6 @@ I used [this document](https://github.com/dff1980/SAPDI-2022#download-images) to
 - rke v1.21.8-rancher1-1
 - VMware vSphere 6.7  
 
-# Stage one - Primary preparation.
-
 ## 1. Deploy a SUSE Rancher cluster and through the Rancher GUI, generate a Bearer Token
 
 for single server cluster
