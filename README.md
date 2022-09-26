@@ -18,18 +18,30 @@ I used [this document](https://github.com/dff1980/SAPDI-2022#download-images) to
 ## 1. Deploy a SUSE Rancher cluster and through the Rancher GUI, generate a Bearer Token
 
 for single server cluster
+```bash
 curl -sfL https://get.k3s.io | sh -s - server
 for HA cluster:
+```
+```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.23.8+k3s2 sh -s - server --cluster-init
 join server to HA cluster
+```
+```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
 join worker nodes to cluster
+```bash
 curl -sfL https://get.k3s.io | K3S_URL=https://<ip or hostname of server1>:6443  K3S_TOKEN=SECRET sh -
-
+```
+```bash
 helm repo add jetstack https://charts.jetstack.io
+```
+```bash
 helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+```
+```bash
 helm repo update
-
+```
+```bash
 helm install cert-manager jetstack/cert-manager \
 --create-namespace \
 --namespace cert-manager \
@@ -39,15 +51,15 @@ helm install cert-manager jetstack/cert-manager \
 --set webhook.nodeSelector."kubernetes\.io/os"=linux \
 --set cainjector.nodeSelector."kubernetes\.io/os"=linux \
 --set startupapicheck.nodeSelector."kubernetes\.io/os"=linux
-  
-  
+```  
+```bash  
 helm install rancher rancher-latest/rancher \
 --create-namespace \
 --namespace cattle-system \
 --set hostname=<IP_OF_LINUX_NODE>.sslip.io \
 --set replicas=3 \
 --set bootstrapPassword=<PASSWORD_FOR_RANCHER_ADMIN>
-
+```
 - Click on your account avatar Rancher - Account & API Keys - Create API Key - Create - Bearer Token 
 
 save Bearer Token, it will be needed to access k8s clusters via rancher cli. 
