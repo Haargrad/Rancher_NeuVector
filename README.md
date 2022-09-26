@@ -13,37 +13,54 @@ I used [this document](https://github.com/dff1980/SAPDI-2022#download-images) to
 - NeuVector 5.0.2
 - rke v1.21.8-rancher1-1
 
-# Этап первый - Первичная подготовка.
+# Stage one - Primary preparation.
 
-## 1. Развернуть два кластера k3s и один rke через Rancher GUI, генерируем Bearer Token
+## 1. Deploy a SUSE Rancher cluster and through the Rancher GUI, generate a Bearer Token
 
-- ns-k3s-fed
+for single server cluster
+curl -sfL https://get.k3s.io | sh -s - server
+for HA cluster:
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.23.8+k3s2 sh -s - server --cluster-init
+join server to HA cluster
+curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
+join worker nodes to cluster
+curl -sfL https://get.k3s.io | K3S_URL=https://<ip or hostname of server1>:6443  K3S_TOKEN=SECRET sh -
 
-Кластер будет исполнять роль федеративного лидера, к нему будут подключаться другие кластеры с NeuVector
-- ns-k3s-slave
+helm repo add jetstack https://charts.jetstack.io
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm repo update
 
-Кластер будет исполнять роль подчиненного, так же на нем будут настроены политики для демонстрации корректной работы NeuVector.
-- ns-rke-unsecured
+helm install cert-manager jetstack/cert-manager \
+--create-namespace \
+--namespace cert-manager \
+--version v1.7.1 \
+--set installCRDs=true \
+--set nodeSelector."kubernetes\.io/os"=linux \
+--set webhook.nodeSelector."kubernetes\.io/os"=linux \
+--set cainjector.nodeSelector."kubernetes\.io/os"=linux \
+--set startupapicheck.nodeSelector."kubernetes\.io/os"=linux
+  
+  
+helm install rancher rancher-latest/rancher \
+--create-namespace \
+--namespace cattle-system \
+--set hostname=<IP_OF_LINUX_NODE>.sslip.io \
+--set replicas=3 \
+--set bootstrapPassword=<PASSWORD_FOR_RANCHER_ADMIN>
 
-Кластер будет исполнять роль образца не безопасного\не прошедшего подготовку RKE кластера
+- Click on your account avatar Rancher - Account & API Keys - Create API Key - Create - Bearer Token 
 
-- Намите на аватурку учетной записи Rancher - Account & API Keys - Create API Key - Create - Bearer Token 
+save Bearer Token, it will be needed to access k8s clusters via rancher cli. 
 
-Скопируйте Bearer Token, он будет нужен для получения доступа к кластерам k8s через rancher cli. 
+## 2. Preparing an RKE Template for a "Secure" Cluster
 
-## 2. Подготовка шаблона RKE для "безопасного" кластера
+- Let's go to the Rancher documentation, we need [RKE template](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#reference-hardened-rke-template-configuration) copy it.
+- In Rancher GUI we create an RKE template (Cluster Management-RKE1 Configuration-RKE Templates-Add Template-Edit as YAML), paste the template copied in the previous step.
 
-- Переходим в документацию к Rancher, нам необходим готовый [шаблон RKE](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#reference-hardened-rke-template-configuration) копируем его.
-- В Rancher GUI создаем шаблон RKE (Cluster Management-RKE1 Configuration-RKE Templates-Add Template-Edit as YAML), вставляем скопированный на предыдушем шаге шаблон.
+## 3. Preparing a Node Template for a "Secure" Cluster
 
-## 3. Подготовка шаблона ноды для "безопасного" кластера
-
-- Переходим в документацию к Rancher, нам необходим готовый [шаблон для SLES15](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#reference-hardened-cloud-config-for-suse-linux-enterprise-server-15-sles-15-and-opensuse-leap-15) копируем его.
-- В Rancher GUI создаем шаблон RKE (Cluster Management-RKE1 Configuration-Node Templates-Add Template), вставляем скопированный на предыдушем шаге шаблон в раздел Cloud Config YAML. 
-
-![4254325432](https://user-images.githubusercontent.com/61315483/189634981-e87f6001-a46b-4776-bda2-9fd440f4f17f.png)
-
-![537487](https://user-images.githubusercontent.com/61315483/189635201-19001f97-cdc1-4786-9011-5917a3ae1ace.png)
+- Let's go to the documentation for Rancher, we need [template for SLES15](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#reference-hardened-cloud-config-for-suse-linux-enterprise-server-15-sles-15-and-opensuse-leap-15) copy it.
+- Create an RKE node template in the Rancher GUI (Cluster Management-RKE1 Configuration-Node Templates-Add Template), paste the template copied in the previous step into the section Cloud Config YAML. 
 
 ## 4. Подготовка шаблоных политик для "безопасного" кластера
 
