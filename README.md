@@ -12,6 +12,7 @@ I used [this document](https://github.com/dff1980/SAPDI-2022#download-images) to
 - kubectl latest
 - NeuVector 5.0.2
 - rke v1.21.8-rancher1-1
+- VMware vSphere 6.7  
 
 # Stage one - Primary preparation.
 
@@ -20,14 +21,15 @@ I used [this document](https://github.com/dff1980/SAPDI-2022#download-images) to
 for single server cluster
 ```bash
 curl -sfL https://get.k3s.io | sh -s - server
-for HA cluster:
 ```
+for HA cluster:
 ```bash
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.23.8+k3s2 sh -s - server --cluster-init
-join server to HA cluster
 ```
+join server to HA cluster
 ```bash
 curl -sfL https://get.k3s.io | K3S_TOKEN=SECRET sh -s - server --server https://<ip or hostname of server1>:6443
+```
 join worker nodes to cluster
 ```bash
 curl -sfL https://get.k3s.io | K3S_URL=https://<ip or hostname of server1>:6443  K3S_TOKEN=SECRET sh -
@@ -74,9 +76,9 @@ save Bearer Token, it will be needed to access k8s clusters via rancher cli.
 - Let's go to the documentation for Rancher, we need [template for SLES15](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#reference-hardened-cloud-config-for-suse-linux-enterprise-server-15-sles-15-and-opensuse-leap-15) copy it.
 - Create an RKE node template in the Rancher GUI (Cluster Management-RKE1 Configuration-Node Templates-Add Template), paste the template copied in the previous step into the section Cloud Config YAML. 
 
-## 4. Подготовка шаблоных политик для "безопасного" кластера
+## 4. Preparing Policy Templates for a "Secure" Cluster
 
-- Переходим в документацию к Rancher, нам необходим готовые политики для [service account](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#configure-default-service-account) и [network](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#configure-network-policy). Политики нужно сохранить на машине, которая будет иметь доступ ко всем кластерам, в идеале она должна иметь Rancher cli на борту.
+- We turn to the documentation for Rancher, we need ready-made policies for [service account](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#configure-default-service-account) and [network](https://docs.ranchermanager.rancher.io/reference-guides/rancher-security/rancher-v2.6-hardening-guides/rke1-hardening-guide-with-cis-v1.6-benchmark#configure-network-policy). Policies need to be saved on a machine that will have access to all clusters, ideally it should have Rancher cli on board.
 ### a. Service account
 ```bash
 vi account_update.yaml
@@ -136,7 +138,8 @@ done
 chmod +x apply_networkPolicy_to_all_ns.sh
 ```
 
-## 5. Установка NeuVector на ns-k3s-fed, ns-k3s-slave и ns-rke-unsecured
+## 5. Deploy rke cluster using RKE template and nodes template
+
 
 ### - Установите все кластера longhorn (без него настройки NeuVector не сохранются) 
 
